@@ -11,7 +11,7 @@ import {
   Building2,
   MapPin
 } from 'lucide-react';
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { Html5QrcodeScanner, Html5Qrcode } from 'html5-qrcode';
 import confetti from 'canvas-confetti';
 import { parseLankaQR, type LankaQRData } from './lib/qr-parser';
 
@@ -38,6 +38,7 @@ const App: React.FC = () => {
   const [refNo, setRefNo] = useState<string>('');
 
   const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (state === 'SCANNER') {
@@ -45,7 +46,7 @@ const App: React.FC = () => {
         "reader",
         {
           fps: 10,
-          qrbox: { width: 250, height: 250 },
+          qrbox: { width: 320, height: 320 },
           rememberLastUsedCamera: true,
           aspectRatio: 1.0,
           // prefer back camera
@@ -89,6 +90,20 @@ const App: React.FC = () => {
 
   const onScanFailure = () => {
     // console.warn(`Code scan error = ${error}`);
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const html5QrCode = new Html5Qrcode("reader");
+      const decodedText = await html5QrCode.scanFileV2(file, false);
+      onScanSuccess(decodedText.decodedText);
+    } catch (err) {
+      console.error("Error scanning file:", err);
+      alert("No QR code found in this image. Please try another one.");
+    }
   };
 
   const handlePay = () => {
@@ -159,11 +174,15 @@ const App: React.FC = () => {
       </div>
 
       <div style={{ marginTop: 24 }}>
-        <button className="btn btn-outline" onClick={() => {
-          // Simulate a scan for demo purposes if camera doesn't work or for quick testing
-          onScanSuccess("000201010212260000000123456789012345678901234520442255204000053031445405525.005802LK5912Kargills Food6007Colombo62110505REF016304D123");
-        }}>
-          Simulate Scan (Mock QR)
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileUpload}
+          accept="image/*"
+          style={{ display: 'none' }}
+        />
+        <button className="btn btn-outline" onClick={() => fileInputRef.current?.click()}>
+          Upload QR
         </button>
       </div>
     </div>
