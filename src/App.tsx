@@ -28,6 +28,7 @@ const DEMO_ACCOUNTS: Account[] = [
   { id: '1', name: 'Savings Account', number: 'xxxx1234', balance: 50250.00 },
   { id: '2', name: 'Current Account', number: 'xxxx5678', balance: 125000.00 },
   { id: '3', name: 'Flash Savings', number: 'xxxx9012', balance: 5500.00 },
+  { id: '4', name: 'Cargills Credit', number: 'xxxx4321', balance: 250000.00 },
 ];
 
 const App: React.FC = () => {
@@ -120,7 +121,7 @@ const App: React.FC = () => {
     <div className="main-content">
       <div className="account-card">
         <div className="account-label">Total Balance</div>
-        <div className="account-balance">LKR 180,750.00</div>
+        <div className="account-balance">LKR 430,750.00</div>
         <div className="account-number">
           Last login: Today, {new Date(Date.now() - 30 * 60000).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}
         </div>
