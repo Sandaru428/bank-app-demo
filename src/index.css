@@ -277,7 +277,9 @@ body {
 }
 
 #reader__status_span,
-#html5-qrcode-button-camera-stop {
+#html5-qrcode-button-camera-stop,
+#reader__dashboard_section_csr select,
+#reader__dashboard_section_csr span {
   display: none !important;
 }
 
